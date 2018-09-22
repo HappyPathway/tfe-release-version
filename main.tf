@@ -45,26 +45,8 @@ resource "consul_keys" "app" {
     value = "${var.service_version}"
   }
 }
-
-data "consul_key_prefix" "app_set" {
-  depends_on = [
-      "consul_keys.app"
-  ]
-  datacenter = "${var.consul_dc}"
-  # token      = "abcd"
-
-  # Prefix to add to prepend to all of the subkey names below.
-  path_prefix = "app/deployments"
-
-  # Read the release version
-  subkey {
-    name    = "release_version"
-    path    = "${var.service_name}/release_version"
-    default = "${var.service_version}"
-  }
-}
     
 output "release_version" {
-    value = "${var.set_version ? data.consul_key_prefix.app_set.var.release_version : data.consul_key_prefix.app.var.release_version}"
+    value = "${var.set_version ? var.service_version : data.consul_key_prefix.app.var.release_version}"
 }
 
