@@ -37,7 +37,7 @@ data "consul_key_prefix" "app" {
 
 resource "consul_keys" "app" {
   count = "${var.set_version ? 1 : 0 }"
-  datacenter = "${var.datacenter}"
+  datacenter = "${var.consul_dc}"
   # token      = "abcd"
 
   # Set the CNAME of our load balancer as a key
