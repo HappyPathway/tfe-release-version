@@ -20,7 +20,6 @@ provider "consul" {
 }
 
 data "consul_key_prefix" "app" {
-  count = "${var.set_version ? 0 : 1 }"
   datacenter = "${var.consul_dc}"
   # token      = "abcd"
 
@@ -48,7 +47,6 @@ resource "consul_keys" "app" {
 }
 
 data "consul_key_prefix" "app_set" {
-  count = "${var.set_version ? 1 : 0 }"
   depends_on = [
       "consul_keys.app"
   ]
