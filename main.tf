@@ -10,6 +10,10 @@ variable "set_version" {
     default = true
 }
 
+variable "enforce_version" {}
+
+variable "env" {}
+
 variable "consul_cluster" {}
 
 variable "consul_dc" {}
@@ -29,9 +33,17 @@ data "consul_key_prefix" "app" {
   # Read the release version
   subkey {
     name    = "release_version"
-    path    = "${var.service_name}/release_version"
+    path    = "${var.service_name}/${var.env}/release_version"
     default = "${var.service_version}"
   }
+    
+  subkey {
+    name    = "release_version"
+    path    = "${var.service_name}/${var.env}/release_version"
+    default = "${var.service_version}"
+  }
+    
+    
 }
 
 resource "consul_keys" "app" {
@@ -54,3 +66,10 @@ output "service_name" {
     value = "${var.service_name}"
 }
 
+output "enforce_version" {
+    value = "${var.enforce_version}"
+}
+
+output "env" {
+    value = "${var.env}"
+}
