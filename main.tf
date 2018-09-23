@@ -50,3 +50,7 @@ output "release_version" {
     value = "${var.set_version ? var.service_version : data.consul_key_prefix.app.var.release_version}"
 }
 
+output "service_name" {
+    value = "${var.service_name}"
+}
+
