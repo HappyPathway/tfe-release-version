@@ -36,14 +36,6 @@ data "consul_key_prefix" "app" {
     path    = "${var.service_name}/${var.env}/release_version"
     default = "${var.service_version}"
   }
-    
-  subkey {
-    name    = "release_version"
-    path    = "${var.service_name}/${var.env}/release_version"
-    default = "${var.service_version}"
-  }
-    
-    
 }
 
 resource "consul_keys" "app" {
@@ -53,8 +45,13 @@ resource "consul_keys" "app" {
 
   # Set the CNAME of our load balancer as a key
   key {
-    path    = "${var.service_name}/release_version"
+    path    = "${var.service_name}/${var.env}/release_version"
     value = "${var.service_version}"
+  }
+  
+  key {
+    path    = "${var.service_name}/${var.env}/enforce_version"
+    value = "${var.enforce_version}"
   }
 }
     
