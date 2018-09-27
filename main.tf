@@ -40,5 +40,5 @@ output "env" {
 }
 
 output "service_version_validator" {
-    value = true
+    value = "true"
 }
