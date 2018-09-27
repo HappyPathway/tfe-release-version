@@ -16,49 +16,12 @@ variable "enforce_version" {}
 
 variable "env" {}
 
-variable "consul_cluster" {}
-
-variable "consul_dc" {}
-
-provider "consul" {
-  address    = "${var.consul_cluster}"
-  datacenter = "${var.consul_dc}"
-}
-
-data "consul_key_prefix" "app" {
-  datacenter = "${var.consul_dc}"
-  # token      = "abcd"
-
-  # Prefix to add to prepend to all of the subkey names below.
-  path_prefix = "app/deployments"
-
-  # Read the release version
-  subkey {
-    name    = "release_version"
-    path    = "${var.service_name}/${var.env}/allowed_versions"
-    default = "${var.allowed_versions}"
-  }
-}
-
-resource "consul_keys" "app" {
-  count = "${var.set_version ? 1 : 0 }"
-  datacenter = "${var.consul_dc}"
-  # token      = "abcd"
-
-  # Set the CNAME of our load balancer as a key
-  key {
-    path    = "${var.service_name}/${var.env}/allowed_versions"
-    value = "${var.allowed_versions}"
-  }
-  
-  key {
-    path    = "${var.service_name}/${var.env}/enforce_version"
-    value = "${var.enforce_version}"
-  }
+module "null_update" {
+    source = "github.com/HappyPathway/terraform-null-update"
 }
     
 output "allowed_versions" {
-    value = "${var.set_version ? var.allowed_versions : data.consul_key_prefix.app.var.allowed_versoins}"
+    value = "${var.allowed_versions}"
 }
 
 output "service_name" {
