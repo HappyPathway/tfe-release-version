@@ -38,3 +38,7 @@ output "enforce_version" {
 output "env" {
     value = "${var.env}"
 }
+
+output "service_version_validator" {
+    value = true
+}
