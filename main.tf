@@ -2,8 +2,10 @@ variable "service_name" {
     default = "simple-app"
 }
 
-variable "service_version" {
-    default = "1.0.0"
+variable "allowed_versions" {
+    default = ["1.0.0"]
+    type = "list"
+    description = "list of allowed versions"
 }
 
 variable "set_version" {
@@ -33,8 +35,8 @@ data "consul_key_prefix" "app" {
   # Read the release version
   subkey {
     name    = "release_version"
-    path    = "${var.service_name}/${var.env}/release_version"
-    default = "${var.service_version}"
+    path    = "${var.service_name}/${var.env}/allowed_versions"
+    default = "${var.allowed_versions}"
   }
 }
 
@@ -45,8 +47,8 @@ resource "consul_keys" "app" {
 
   # Set the CNAME of our load balancer as a key
   key {
-    path    = "${var.service_name}/${var.env}/release_version"
-    value = "${var.service_version}"
+    path    = "${var.service_name}/${var.env}/allowed_versions"
+    value = "${var.allowed_versions}"
   }
   
   key {
@@ -55,8 +57,8 @@ resource "consul_keys" "app" {
   }
 }
     
-output "release_version" {
-    value = "${var.set_version ? var.service_version : data.consul_key_prefix.app.var.release_version}"
+output "allowed_versions" {
+    value = "${var.set_version ? var.allowed_versions : data.consul_key_prefix.app.var.allowed_versoins}"
 }
 
 output "service_name" {
