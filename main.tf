@@ -16,8 +16,11 @@ variable "enforce_version" {}
 
 variable "env" {}
 
-module "null_update" {
-    source = "github.com/HappyPathway/terraform-null-update"
+resource "random_id" "random" {
+  keepers {
+    uuid = "${uuid()}"
+  }
+  byte_length = 32
 }
     
 output "allowed_versions" {
